@@ -1,21 +1,6 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: sources
-  namespace: flux-system
-spec:
-  interval: 1h00m0s
-  timeout: 5m0s
-  sourceRef:
-    kind: GitRepository
-    name: flux-system
-  path: ./cluster/sources
-  prune: true
-  wait: true
----
-apiVersion: kustomize.toolkit.fluxcd.io/v1
-kind: Kustomization
-metadata:
   name: sops
   namespace: flux-system
 spec:
@@ -28,10 +13,25 @@ spec:
     provider: sops
     secretRef:
       name: sops-gpg
-  path: ./cluster
+  path: .
   prune: true
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: sources
+  namespace: flux-system
+spec:
+  interval: 1h00m0s
+  timeout: 5m0s
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./cluster/sources
+  prune: true
+  wait: true
   dependsOn:
-    - name: sources
+    - name: sops
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
