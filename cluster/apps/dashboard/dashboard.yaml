@@ -24,6 +24,8 @@ spec:
       ingress:
         enabled: true
         ingressClassName: nginx
+        hosts:
+          - localhost
         path: /cluster
         tls:
           enabled: false
