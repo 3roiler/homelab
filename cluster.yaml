@@ -10,10 +10,6 @@ spec:
     kind: GitRepository
     name: flux-system
   path: ./cluster/sources
-  decryption:
-    provider: sops
-    secretRef:
-      name: sops-gpg
   prune: true
   wait: true
 ---
