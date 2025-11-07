@@ -13,8 +13,6 @@ spec:
       labels:
         app: web
     spec:
-      imagePullSecrets:
-        - name: ghcr-token
       containers:
         - name: web
           image: ghcr.io/3roiler/web:main
