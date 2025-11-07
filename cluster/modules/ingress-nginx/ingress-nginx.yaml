@@ -40,8 +40,8 @@ spec:
         type: LoadBalancer
         externalTrafficPolicy: Local
       metrics:
-        enabled: false
+        enabled: true
         serviceMonitor:
-          enabled: false
+          enabled: true
       admissionWebhooks:
         enabled: false
