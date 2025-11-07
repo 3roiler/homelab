@@ -1,0 +1,49 @@
+{
+    "name": "HOMELAB",
+    
+    "build": {
+        "dockerfile": "Dockerfile"
+    },
+    
+    "forwardPorts": [],
+    
+    "hostRequirements": {
+        "cpus": 4,
+        "memory": "4gb",
+        "gpu": false,
+        "storage": "5gb"
+    },
+    
+    "runArgs": [
+        "--env-file",
+        "${localWorkspaceFolder}/.env"
+    ],
+
+    "features": {
+        "ghcr.io/devcontainers/features/kubectl-helm-minikube": {
+            "version": "latest",
+            "helm": "latest",
+            "minikube": "latest"
+        },
+        "ghcr.io/goldsam/dev-container-features/flux2": {
+            "version": "latest"
+        },
+        "ghcr.io/devcontainers/features/docker-in-docker": {
+            "version": "latest"
+        }
+    },
+    
+    "postCreateCommand": "zsh ./scripts/init.sh",
+    
+    "customizations": {
+        "vscode": {
+            "settings": {
+                "terminal.integrated.defaultProfile.linux": "zsh",
+                "terminal.integrated.profiles.linux": {
+                    "zsh": { "path": "/usr/bin/zsh" },
+                    "bash": { "path": "/bin/bash" }
+                }
+            }
+        }
+    }
+}

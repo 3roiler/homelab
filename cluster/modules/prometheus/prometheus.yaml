@@ -1,0 +1,94 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: monitoring
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: kube-prometheus-stack
+  namespace: monitoring
+spec:
+  interval: 1h
+  chart:
+    spec:
+      chart: kube-prometheus-stack
+      version: "79.0.1"
+      sourceRef:
+        kind: HelmRepository
+        name: prometheus-community
+        namespace: flux-system
+  install:
+    remediation:
+      retries: 3
+  upgrade:
+    remediation:
+      retries: 3
+  values:
+    fullnameOverride: prometheus
+    prometheus:
+      prometheusSpec:
+        routePrefix: /prometheus
+        externalUrl: "http://localhost/prometheus"
+        retention: 15d
+        resources:
+          requests:
+            cpu: 200m
+            memory: 512Mi
+          limits:
+            cpu: 500m
+            memory: 1Gi
+      ingress:
+        enabled: false
+        ingressClassName: nginx
+        pathType: ImplementationSpecific
+        hosts:
+          - localhost
+        paths:
+          - /prometheus
+        tls: []
+    alertmanager:
+      enabled: true
+      alertmanagerSpec:
+        replicas: 1
+        routePrefix: /alerts
+        externalUrl: "http://localhost/alerts"
+      ingress:
+        enabled: false
+        ingressClassName: nginx
+        pathType: ImplementationSpecific
+        hosts:
+          - localhost
+        paths:
+          - /alerts
+        tls: []
+    grafana:
+      enabled: false
+      admin:
+        userKey: admin-user
+        passwordKey: admin-password
+      grafana.ini:
+        server:
+          root_url: "%(protocol)s://%(domain)s:%(http_port)s/grafana/"
+          serve_from_sub_path: true
+      defaultDashboardsTimezone: Europe/Berlin
+      resources:
+        requests:
+          cpu: 100m
+          memory: 256Mi
+        limits:
+          cpu: 250m
+          memory: 512Mi
+      ingress:
+        enabled: true
+        ingressClassName: nginx
+        pathType: ImplementationSpecific
+        hosts:
+          - localhost
+        paths:
+          - /grafana
+        tls: []
+    kube-state-metrics:
+      enabled: true
+    nodeExporter:
+      enabled: false
