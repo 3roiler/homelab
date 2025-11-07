@@ -76,7 +76,7 @@ spec:
         size: 5Gi
         accessModes:
           - ReadWriteOnce
-        storageClassName: standard
+        storageClassName: hostpath
       defaultDashboardsTimezone: Europe/Berlin
       resources:
         requests:
