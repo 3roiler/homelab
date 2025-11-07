@@ -33,7 +33,7 @@
         }
     },
     
-    "postCreateCommand": "zsh ./scripts/init.sh",
+    "postCreateCommand": "./scripts/init.zsh",
     
     "customizations": {
         "vscode": {

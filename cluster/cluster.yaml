@@ -8,7 +8,7 @@ spec:
   sourceRef:
     kind: GitRepository
     name: flux-system
-  path: sources
+  path: ./cluster/sources
   prune: true
   wait: true
   timeout: 5m
@@ -24,7 +24,7 @@ spec:
   sourceRef:
     kind: GitRepository
     name: flux-system
-  path: modules
+  path: ./cluster/modules
   prune: true
   wait: true
   dependsOn:
