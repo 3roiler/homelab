@@ -13,6 +13,7 @@ spec:
     provider: sops
     secretRef:
       name: sops-gpg
+      namespace: flux-system
   path: ./cluster/sources
   prune: true
   wait: true
