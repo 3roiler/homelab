@@ -3,4 +3,3 @@ kind: Kustomization
 resources:
   - secrets.yaml
   - helm-repositories.yaml
-  - image-repositories.yaml
