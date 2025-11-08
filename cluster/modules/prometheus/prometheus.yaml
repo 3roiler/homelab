@@ -6,14 +6,14 @@ metadata:
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: kube-prometheus-stack
+  name: prometheus
   namespace: monitoring
 spec:
   interval: 1h
   chart:
     spec:
       chart: kube-prometheus-stack
-      version: "79.0.1"
+      version: "79.4.0"
       sourceRef:
         kind: HelmRepository
         name: prometheus-community
@@ -26,11 +26,27 @@ spec:
       retries: 3
   values:
     fullnameOverride: prometheus
+    prometheusOperator:
+      resources:
+        requests:
+          cpu: 100m
+          memory: 100Mi
+        limits:
+          cpu: 250m
+          memory: 300Mi
     prometheus:
       prometheusSpec:
         routePrefix: /prometheus
         externalUrl: "http://localhost/prometheus"
         retention: 15d
+        storageSpec:
+          volumeClaimTemplate:
+            spec:
+              accessModes: ["ReadWriteOnce"]
+              resources:
+                requests:
+                  storage: 20Gi
+              storageClassName: hostpath
         resources:
           requests:
             cpu: 200m
@@ -53,6 +69,14 @@ spec:
         replicas: 1
         routePrefix: /alerts
         externalUrl: "http://localhost/alerts"
+        podAntiAffinity: "hard"
+        resources:
+          requests:
+            cpu: 100m
+            memory: 200Mi
+          limits:
+            cpu: 250m
+            memory: 500Mi
       ingress:
         enabled: true
         ingressClassName: nginx
